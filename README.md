@@ -6,7 +6,7 @@ U2F API for browsers
 
 ### Basics
 
-u2f-api has exports two functions and an error "enum". The functions are `register()` and `sign()`.
+u2f-api exports two functions and an error "enum". The functions are `register()` and `sign()`.
 
 The `register()` and `sign()` functions return *cancellable promises*, i.e. promises you can cancel manually. This helps you to ensure your code doesn't continue in success flow and by mistake accept a registration or authentification request. The returned promise has a function `cancel()` which will immediately reject the promise.
 
@@ -35,7 +35,7 @@ The values and interpretation of the arguments are the same as with `register( )
 
 #### Errors
 
-`register()` and `sign()` can return rejected promises. The rejection error is an `Error` object with a `metaData` property containing `code` and `type`. The `code` is a numerical value describing the type of the error, and `type` is the name of the error, as defined by the `ErrorCode` enum in the "FIDO U2F Javascript API" specification. They are:
+`register()` and `sign()` can return rejected promises. The rejection error is an `Error` object with a `metaData` property containing `code` and `type`. The `code` is a numerical value describing the type of the error, and `type` is the name of the error, as defined by the `ErrorCodes` enum in the "FIDO U2F Javascript API" specification. They are:
 
 ```
 OK = 0
