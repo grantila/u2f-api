@@ -4,6 +4,51 @@ U2F API for browsers
 
 ## API
 
+### Basics
+
+u2f-api has exports two functions and an error "enum". The functions are `register()` and `sign()`.
+
+The `register()` and `sign()` functions return *cancellable promises*, i.e. promises you can cancel manually. This helps you to ensure your code doesn't continue in success flow and by mistake accept a registration or authentification request. The returned promise has a function `cancel()` which will immediately reject the promise.
+
+#### Register
+
+```js
+Promise{ RegisterResponse } register(
+  [RegisterRequest] registerRequests,
+  [SignRequest] signRequests, // optional
+  Number timeout // optional
+)
+```
+
+The `registerRequests` can be either a RegisterRequest or an array of such. The optional `signRequests` must be, unless ignored, an array of SignRequests. The optional `timeout` is in seconds, and will default to an implementation specific value, e.g. 30.
+
+#### Sign
+
+```js
+Promise{ SignResponse } sign(
+  [SignRequest] signRequests,
+  Number timeout // optional
+)
+```
+
+The values and interpretation of the arguments are the same as with `register( )`.
+
+#### Errors
+
+`register()` and `sign()` can return rejected promises. The rejection error is an `Error` object with a `metaData` property containing `code` and `type`. The `code` is a numerical value describing the type of the error, and `type` is the name of the error, as defined by the `ErrorCode` enum in the "FIDO U2F Javascript API" specification. They are:
+
+```
+OK = 0
+OTHER_ERROR = 1
+BAD_REQUEST = 2
+CONFIGURATION_UNSUPPORTED = 3
+DEVICE_INELIGIBLE = 4
+TIMEOUT = 5
+CANCELLED = -1 // Added by this library
+```
+
+## Usage
+
 ### Loading the library
 
 The library is promisified and will use the built-in native promises of the browser, unless another promise library is injected.
@@ -18,25 +63,36 @@ var u2fApi = require( 'u2f-api' )( require( 'bluebird' ) ); // Will use bluebird
 
 ### Registering a passkey
 
-```js
-var u2fApi = require( 'u2f-api' )/* ( ... ) */;
+With `registerRequestsFromServer` somehow received from the server, the client code becomes:
 
-// registerRequest can be 1 request, or an array.
-u2fApi.register( registerRequests, signRequests = null, timeout = native default )
-.then( ... )
+```js
+u2fApi.register( registerRequestsFromServer )
+.then( sendRegisterResponseToServer )
 .catch( ... );
 ```
 
 ### Signing a passkey
 
-```js
-var u2fApi = require( 'u2f-api' )/* ( ... ) */;
+With `signRequestsFromServer` also received from the server somehow:
 
-u2fApi.sign( signRequests, timeout = native default )
-.then( ... )
+```js
+u2fApi.sign( signRequestsFromServer )
+.then( sendSignResponseToServer )
 .catch( ... );
 ```
 
 ### Canceling
 
-The returned promises from `register()` and `sign()` have a method `cancel()` which will cancel the request. This is nothing more than a helper function.
+As mentioned in the API section above, the returned promises from `register()` and `sign()` have a method `cancel()` which will cancel the request. This is nothing more than a helper function.
+
+## Example implementation
+
+U2F is a *challenge-response protocol*. The server sends a `challenge` to the client, which responds with a `response`.
+
+This library is intended to be used in the client (the browser). There is another package intended for server-side: https://www.npmjs.com/package/u2f
+
+## Common problems
+
+If you get `BAD_REQUEST`, the most common situations are that you either don't use `https` (which you must), or that the AppID doesn't match the server URI. In fact, the AppID must be exactly the base URI to your server (such as `https://your-server.com`), including the port if it isn't 443.
+
+For more information, please see https://developers.yubico.com/U2F/Libraries/Client_error_codes.html and https://developers.yubico.com/U2F/App_ID.html
