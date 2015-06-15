@@ -12,6 +12,9 @@
     "u2f",
     "api",
     "client",
+    "2-factor",
+    "authentication",
+    "fido",
     "yubikey",
     "promise"
   ]
