@@ -4,11 +4,25 @@ U2F API for browsers
 
 ## API
 
+### Support
+
+U2F is tested to work with newer versions of Chrome for Mac. It doesn't work very well with
+
 ### Basics
 
-u2f-api exports two functions and an error "enum". The functions are `register()` and `sign()`.
+u2f-api exports two main functions and an error "enum". The main functions are `register()` and `sign()`, although since U2F isn't widely supported, the functions `isSupported()` as well as `ensureSupport()` helps you build applications which can use U2F only when the client supports it.
 
 The `register()` and `sign()` functions return *cancellable promises*, i.e. promises you can cancel manually. This helps you to ensure your code doesn't continue in success flow and by mistake accept a registration or authentification request. The returned promise has a function `cancel()` which will immediately reject the promise.
+
+#### Check or ensure support
+
+```js
+Promise{ Boolean } isSupported() // Doesn't throw/reject
+```
+
+```js
+Promise{ undefined } ensureSupport() // Throws/rejects if not supported
+```
 
 #### Register
 
@@ -38,7 +52,7 @@ The values and interpretation of the arguments are the same as with `register( )
 `register()` and `sign()` can return rejected promises. The rejection error is an `Error` object with a `metaData` property containing `code` and `type`. The `code` is a numerical value describing the type of the error, and `type` is the name of the error, as defined by the `ErrorCodes` enum in the "FIDO U2F Javascript API" specification. They are:
 
 ```
-OK = 0
+OK = 0 // u2f-api will never throw errors with this code
 OTHER_ERROR = 1
 BAD_REQUEST = 2
 CONFIGURATION_UNSUPPORTED = 3
@@ -78,6 +92,24 @@ With `signRequestsFromServer` also received from the server somehow:
 ```js
 u2fApi.sign( signRequestsFromServer )
 .then( sendSignResponseToServer )
+.catch( ... );
+```
+
+### Example with checks for client support
+
+```js
+u2fApi.isSupported( )
+.then( function( supported ) {
+	if ( supported )
+	{
+		return u2fApi.sign( signRequestsFromServer )
+		.then( sendSignResponseToServer )
+	}
+	else
+	{
+		... // Other authentication method
+	}
+} )
 .catch( ... );
 ```
 
