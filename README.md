@@ -6,7 +6,7 @@ U2F API for browsers
 
 ### Support
 
-U2F is tested to work with newer versions of Chrome for Mac. It doesn't work very well with
+U2F is tested to work with newer versions of Chrome for Mac. It doesn't work very well in Windows, and most other browsers don't support it, like Opera, Firefox and Safari.
 
 ### Basics
 
@@ -103,7 +103,7 @@ u2fApi.isSupported( )
 	if ( supported )
 	{
 		return u2fApi.sign( signRequestsFromServer )
-		.then( sendSignResponseToServer )
+		.then( sendSignResponseToServer );
 	}
 	else
 	{
