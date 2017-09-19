@@ -6,43 +6,61 @@ U2F API for browsers
 
 ### Support
 
-U2F is tested to work with newer versions of Chrome for Mac. It doesn't work very well in Windows, and most other browsers don't support it, like Opera, Firefox and Safari.
+U2F has for a long time been supported in Chrome, although not with the standard `window.u2f` methods, but through a built-in extension. Nowadays, browsers seem to use `window.u2f` to expose the functionality.
+
+Supported browsers are:
+  * Chrome (unless ancient), using Chrome-specific hacks
+  * Firefox 58 and later, using `window.u2f`
+
+Opera, Safari and other browsers still lack U2F support.
+
+Since 0.1.0, this library supports the standard `window.u2f` methods.
+
+The library should be complemented with server-side functionality, e.g. using the [`u2f`](https://www.npmjs.com/package/u2f) package.
 
 ### Basics
 
-u2f-api exports two main functions and an error "enum". The main functions are `register()` and `sign()`, although since U2F isn't widely supported, the functions `isSupported()` as well as `ensureSupport()` helps you build applications which can use U2F only when the client supports it.
+`u2f-api` exports two main functions and an error "enum". The main functions are `register()` and `sign()`, although since U2F isn't widely supported, the functions `isSupported()` as well as `ensureSupport()` helps you build applications which can use U2F only when the client supports it.
 
 The `register()` and `sign()` functions return *cancellable promises*, i.e. promises you can cancel manually. This helps you to ensure your code doesn't continue in success flow and by mistake accept a registration or authentification request. The returned promise has a function `cancel()` which will immediately reject the promise.
 
 #### Check or ensure support
 
-```js
-Promise{ Boolean } isSupported() // Doesn't throw/reject
+```ts
+import { isSupported } from 'u2f-api'
+
+isSupported(): Promise< Boolean > // Doesn't throw/reject
 ```
 
-```js
-Promise{ undefined } ensureSupport() // Throws/rejects if not supported
+```ts
+import { ensureSupport } from 'u2f-api'
+
+ensureSupport(): Promise< void > // Throws/rejects if not supported
 ```
 
 #### Register
 
-```js
-Promise{ RegisterResponse } register(
-  [RegisterRequest] registerRequests,
-  [SignRequest] signRequests, // optional
-  Number timeout // optional
-)
+```ts
+import { register } from 'u2f-api'
+
+register(
+  registerRequests: RegisterRequest[],
+  signRequests: SignRequest[], // optional
+  timeout: number // optional
+): Promise< RegisterResponse >
 ```
 
 The `registerRequests` can be either a RegisterRequest or an array of such. The optional `signRequests` must be, unless ignored, an array of SignRequests. The optional `timeout` is in seconds, and will default to an implementation specific value, e.g. 30.
 
 #### Sign
 
-```js
-Promise{ SignResponse } sign(
-  [SignRequest] signRequests,
-  Number timeout // optional
-)
+```ts
+import { sign } from 'u2f-api'
+
+sign(
+  signRequests: SignRequest[],
+  timeout: number // optional
+): Promise< SignResponse >
 ```
 
 The values and interpretation of the arguments are the same as with `register( )`.
@@ -51,7 +69,7 @@ The values and interpretation of the arguments are the same as with `register( )
 
 `register()` and `sign()` can return rejected promises. The rejection error is an `Error` object with a `metaData` property containing `code` and `type`. The `code` is a numerical value describing the type of the error, and `type` is the name of the error, as defined by the `ErrorCodes` enum in the "FIDO U2F Javascript API" specification. They are:
 
-```
+```js
 OK = 0 // u2f-api will never throw errors with this code
 OTHER_ERROR = 1
 BAD_REQUEST = 2
