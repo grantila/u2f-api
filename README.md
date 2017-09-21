@@ -10,9 +10,8 @@ U2F has for a long time been supported in Chrome, although not with the standard
 
 Supported browsers are:
   * Chrome (unless ancient), using Chrome-specific hacks
-  * Firefox 58 and later, using `window.u2f`
 
-Opera, Safari and other browsers still lack U2F support.
+Firefox, Opera, Safari and other browsers still lack U2F support.
 
 Since 0.1.0, this library supports the standard `window.u2f` methods.
 
