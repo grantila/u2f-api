@@ -2,7 +2,7 @@
   "name": "u2f-api",
   "description": "Promisified U2F API for browsers",
   "license": "MIT",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "author": "Gustaf Räntilä <g.rantila@gmail.com>",
   "repository": {
     "type": "git",
