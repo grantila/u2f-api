@@ -9,9 +9,10 @@ U2F API for browsers
 U2F has for a long time been supported in Chrome, although not with the standard `window.u2f` methods, but through a built-in extension. Nowadays, browsers seem to use `window.u2f` to expose the functionality.
 
 Supported browsers are:
-  * Chrome (unless ancient), using Chrome-specific hacks
+  * Chrome, using Chrome-specific hacks
+  * Opera, using Chrome-specific hacks
 
-Firefox, Opera, Safari and other browsers still lack U2F support.
+Firefox, Safari and other browsers still lack U2F support.
 
 Since 0.1.0, this library supports the standard `window.u2f` methods.
 
