@@ -1,3 +1,6 @@
+[![npm version][npm-image]][npm-url]
+[![build status][travis-image]][travis-url]
+
 # u2f-api
 
 U2F API for browsers
@@ -146,3 +149,8 @@ This library is intended to be used in the client (the browser). There is anothe
 If you get `BAD_REQUEST`, the most common situations are that you either don't use `https` (which you must), or that the AppID doesn't match the server URI. In fact, the AppID must be exactly the base URI to your server (such as `https://your-server.com`), including the port if it isn't 443.
 
 For more information, please see https://developers.yubico.com/U2F/Libraries/Client_error_codes.html and https://developers.yubico.com/U2F/App_ID.html
+
+[npm-image]: https://img.shields.io/npm/v/u2f-api.svg
+[npm-url]: https://npmjs.org/package/u2f-api
+[travis-image]: https://img.shields.io/travis/grantila/u2f-api.svg
+[travis-url]: https://travis-ci.org/grantila/u2f-api
