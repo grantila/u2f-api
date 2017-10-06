@@ -8,6 +8,9 @@ import * as jsdom from "jsdom";
 
 import { API } from '../../';
 
+// Tests the default-import to work
+import u2fApi from '../../';
+
 
 const ErrorCodesEnum = {
 	CANCELLED: -1,
