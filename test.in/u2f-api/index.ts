@@ -1,5 +1,8 @@
 'use strict';
 
+declare var global: any;
+declare var require: any;
+
 import 'mocha';
 import { expect } from 'chai';
 import { Finally, Try, delay } from 'already';
@@ -212,7 +215,7 @@ function wrappedTest(
 )
 : ( ) => Promise< void >
 {
-	return ( ): Promise< void > =>
+	return async ( ): Promise< void > =>
 	{
 		const dom = new JSDOM(
 			"",
@@ -234,7 +237,7 @@ function wrappedTest(
 
 		const api = getNewU2FApi( );
 
-		return Try( ( ) => fn( api ) )
+		await Try( ( ) => fn( api ) )
 		.then( ...Finally( ( ) =>
 		{
 			gmp.restore( );
