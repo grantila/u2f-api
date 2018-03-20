@@ -20,6 +20,8 @@ U2F has for a long time been supported in Chrome, although not with the standard
 Supported browsers are:
   * Chrome, using Chrome-specific hacks
   * Opera, using Chrome-specific hacks
+  * Firefox 58+, although not proper support for facets
+    * *multi-domain registrations will work differently from Chrome*
 
 Firefox, Safari and other browsers still lack U2F support.
 
