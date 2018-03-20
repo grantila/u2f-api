@@ -23,7 +23,7 @@ Supported browsers are:
   * Firefox 58+, although not proper support for facets
     * *multi-domain registrations will work differently from Chrome*
 
-Firefox, Safari and other browsers still lack U2F support.
+Safari and other browsers still lack U2F support.
 
 Since 0.1.0, this library supports the standard `window.u2f` methods.
 
