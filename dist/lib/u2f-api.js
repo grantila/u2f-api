@@ -1,11 +1,11 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const chromeApi = require("./generated-google-u2f-api");
+var chromeApi = require("./generated-google-u2f-api");
 // Feature detection (yes really)
-const isBrowser = (typeof navigator !== 'undefined') && !!navigator.userAgent;
-const isSafari = isBrowser && navigator.userAgent.match(/Safari\//)
+var isBrowser = (typeof navigator !== 'undefined') && !!navigator.userAgent;
+var isSafari = isBrowser && navigator.userAgent.match(/Safari\//)
     && !navigator.userAgent.match(/Chrome\//);
-const isEDGE = isBrowser && navigator.userAgent.match(/Edge\/1[2345]/);
+var isEDGE = isBrowser && navigator.userAgent.match(/Edge\/1[2345]/);
 var _backend = null;
 function getBackend() {
     if (!_backend)
@@ -20,7 +20,7 @@ function getBackend() {
                 // extension lacks full support (Multi-facet apps), so we
                 // block it until proper support.
                 return notSupported();
-            const hasNativeSupport = (typeof window.u2f !== 'undefined') &&
+            var hasNativeSupport = (typeof window.u2f !== 'undefined') &&
                 (typeof window.u2f.sign === 'function');
             if (hasNativeSupport)
                 return resolve({ u2f: window.u2f });
@@ -61,15 +61,15 @@ exports.ErrorNames = {
     "5": "TIMEOUT"
 };
 function makeError(msg, err) {
-    const code = err != null ? err.errorCode : 1; // Default to OTHER_ERROR
-    const type = exports.ErrorNames['' + code];
-    const error = new Error(msg);
-    error.metaData = { type, code };
+    var code = err != null ? err.errorCode : 1; // Default to OTHER_ERROR
+    var type = exports.ErrorNames['' + code];
+    var error = new Error(msg);
+    error.metaData = { type: type, code: code };
     return error;
 }
 function isSupported() {
     return getBackend()
-        .then(backend => !!backend.u2f);
+        .then(function (backend) { return !!backend.u2f; });
 }
 exports.isSupported = isSupported;
 function _ensureSupport(backend) {
@@ -96,7 +96,7 @@ function register(registerRequests, signRequests, timeout) {
     return getBackend()
         .then(function (backend) {
         _ensureSupport(backend);
-        const { u2f } = backend;
+        var u2f = backend.u2f;
         return new Promise(function (resolve, reject) {
             function callback(response) {
                 if (response.errorCode)
@@ -106,7 +106,7 @@ function register(registerRequests, signRequests, timeout) {
                     resolve(response);
                 }
             }
-            const appId = registerRequests[0].appId;
+            var appId = registerRequests[0].appId;
             u2f.register(appId, registerRequests, signRequests, callback, timeout);
         });
     });
@@ -118,7 +118,7 @@ function sign(signRequests, timeout) {
     return getBackend()
         .then(function (backend) {
         _ensureSupport(backend);
-        const { u2f } = backend;
+        var u2f = backend.u2f;
         return new Promise(function (resolve, reject) {
             function callback(response) {
                 if (response.errorCode)
@@ -128,8 +128,8 @@ function sign(signRequests, timeout) {
                     resolve(response);
                 }
             }
-            const appId = signRequests[0].appId;
-            const challenge = signRequests[0].challenge;
+            var appId = signRequests[0].appId;
+            var challenge = signRequests[0].challenge;
             u2f.sign(appId, challenge, signRequests, callback, timeout);
         });
     });
