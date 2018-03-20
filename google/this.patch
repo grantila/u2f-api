@@ -1,0 +1,40 @@
+--- google-u2f-api.js	2018-03-20 12:07:45.000000000 +0100
++++ generated-google-u2f-api.js	2018-03-20 13:38:17.000000000 +0100
+@@ -16,6 +16,8 @@
+  */
+ var u2f = u2f || {};
+ 
++module.exports = u2f; // Adaptation for u2f-api package
++
+ /**
+  * FIDO U2F Javascript API Version
+  * @number
+@@ -613,6 +615,28 @@
+ };
+ 
+ /**
++ * Calls the callback with true or false as first and only argument
++ * @param {Function} callback
++ */
++u2f.isSupported = function(callback) {
++  var hasCalledBack = false;
++  function reply(value) {
++    if (hasCalledBack)
++      return;
++    hasCalledBack = true;
++    callback(value);
++  }
++  u2f.getApiVersion(
++    function (response) {
++      js_api_version = response['js_api_version'] === undefined ? 0 : response['js_api_version'];
++      reply(true);
++    }
++  );
++  // No response from extension within 200ms -> no support
++  setTimeout(reply.bind(null, false), 200);
++};
++
++/**
+  * Dispatches an array of sign requests to available U2F tokens.
+  * If the JS API version supported by the extension is unknown, it first sends a
+  * message to the extension to find out the supported API version and then it sends

@@ -9,7 +9,7 @@ import { Finally, Try, delay } from 'already';
 
 import * as jsdom from "jsdom";
 
-import { API } from '../../';
+type API = any;
 
 // Tests the default-import to work
 import u2fApi from '../../';

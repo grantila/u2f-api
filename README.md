@@ -5,6 +5,12 @@
 
 U2F API for browsers
 
+## History
+
+- 1.0.0
+	- Support for custom promise libraries removed
+	- Promises no longer cancellable
+
 ## API
 
 ### Support
@@ -25,7 +31,6 @@ The library should be complemented with server-side functionality, e.g. using th
 
 `u2f-api` exports two main functions and an error "enum". The main functions are `register()` and `sign()`, although since U2F isn't widely supported, the functions `isSupported()` as well as `ensureSupport()` helps you build applications which can use U2F only when the client supports it.
 
-The `register()` and `sign()` functions return *cancellable promises*, i.e. promises you can cancel manually. This helps you to ensure your code doesn't continue in success flow and by mistake accept a registration or authentification request. The returned promise has a function `cancel()` which will immediately reject the promise.
 
 #### Check or ensure support
 
@@ -79,22 +84,22 @@ BAD_REQUEST = 2
 CONFIGURATION_UNSUPPORTED = 3
 DEVICE_INELIGIBLE = 4
 TIMEOUT = 5
-CANCELLED = -1 // Added by this library
 ```
 
 ## Usage
 
 ### Loading the library
 
-The library is promisified and will use the built-in native promises of the browser, unless another promise library is injected.
-
-The following are valid ways to load the library:
+The library is promisified and will use the built-in native promises of the browser, ~~unless another promise library is injected~~ (deprecated since 1.0).
 
 ```js
-var u2fApi = require( 'u2f-api' ); // Will use the native Promise
-// ... or
-var u2fApi = require( 'u2f-api' )( require( 'bluebird' ) ); // Will use bluebird for promises
+var u2fApi = require( 'u2f-api' ); // CommonJS
 ```
+
+```js
+import u2fApi from 'u2f-api' // ES modules
+```
+
 
 ### Registering a passkey
 
@@ -134,9 +139,6 @@ u2fApi.isSupported( )
 .catch( ... );
 ```
 
-### Canceling
-
-As mentioned in the API section above, the returned promises from `register()` and `sign()` have a method `cancel()` which will cancel the request. This is nothing more than a helper function.
 
 ## Example implementation
 

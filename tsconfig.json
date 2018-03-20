@@ -2,12 +2,14 @@
 	"compilerOptions": {
 		"declaration": true,
 		"lib": [ "es2015", "es2017", "dom" ],
-		"outDir": "compiled",
-		"pretty": true,
+		"outDir": "dist",
 		"sourceMap": true,
-		"target": "es5"
+		"module": "CommonJS",
+		"target": "esnext"
 	},
 	"include": [
-		"u2f-api"
+		"index.ts",
+		"src",
+		"test"
 	]
 }

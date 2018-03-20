@@ -9,10 +9,12 @@
     "url": "https://github.com/grantila/u2f-api.git"
   },
   "scripts": {
-    "test": "scripts/test.sh"
+    "build": "scripts/build.sh",
+    "test": "node_modules/.bin/mocha dist/test",
+    "buildtest": "npm run build && npm run test"
   },
   "pre-commit": [
-    "test"
+    "buildtest"
   ],
   "keywords": [
     "u2f",
@@ -24,7 +26,8 @@
     "yubikey",
     "promise"
   ],
-  "types": "./index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
     "@types/mocha": "2.x",
     "already": "1.x",
@@ -32,6 +35,7 @@
     "jsdom": "11.x",
     "mocha": "5.x",
     "pre-commit": "1.x",
+    "rimraf": "2.x",
     "typescript": "2.7.x"
   }
 }
