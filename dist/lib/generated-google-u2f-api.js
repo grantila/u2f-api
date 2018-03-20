@@ -632,8 +632,8 @@ u2f.isSupported = function(callback) {
       reply(true);
     }
   );
-  // No response from extension within 200ms -> no support
-  setTimeout(reply.bind(null, false), 200);
+  // No response from extension within 500ms -> no support
+  setTimeout(reply.bind(null, false), 500);
 };
 
 /**
