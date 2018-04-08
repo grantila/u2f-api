@@ -157,7 +157,7 @@ export function register(
 : Promise< RegisterResponse >
 {
 	if ( !Array.isArray( registerRequests ) )
-		registerRequests = [ registerRequests ];
+		registerRequests = [ registerRequests ] as ReadonlyArray< RegisterRequest >;
 
 	if ( typeof signRequests === 'number' && typeof timeout === 'undefined' )
 	{
@@ -203,7 +203,7 @@ export function sign(
 : Promise< SignResponse >
 {
 	if ( !Array.isArray( signRequests ) )
-		signRequests = [ signRequests ];
+		signRequests = [ signRequests ] as ReadonlyArray< SignRequest >;
 
 	return getBackend( )
 	.then( function( backend )
