@@ -8,41 +8,46 @@ var isSafari = isBrowser && navigator.userAgent.match(/Safari\//)
 var isEDGE = isBrowser && navigator.userAgent.match(/Edge\/1[2345]/);
 var _backend = null;
 function getBackend() {
-    if (!_backend)
-        _backend = new Promise(function (resolve, reject) {
-            function notSupported() {
-                resolve({ u2f: null });
-            }
-            if (!isBrowser)
-                return notSupported();
-            if (isSafari)
-                // Safari doesn't support U2F, and the Safari-FIDO-U2F
-                // extension lacks full support (Multi-facet apps), so we
-                // block it until proper support.
-                return notSupported();
-            var hasNativeSupport = (typeof window.u2f !== 'undefined') &&
-                (typeof window.u2f.sign === 'function');
-            if (hasNativeSupport)
-                return resolve({ u2f: window.u2f });
-            if (isEDGE)
-                // We don't want to check for Google's extension hack on EDGE
-                // as it'll cause trouble (popups, etc)
-                return notSupported();
-            if (location.protocol === 'http:')
-                // U2F isn't supported over http, only https
-                return notSupported();
-            if (typeof MessageChannel === 'undefined')
-                // Unsupported browser, the chrome hack would throw
-                return notSupported();
-            // Test for google extension support
-            chromeApi.isSupported(function (ok) {
-                if (ok)
-                    resolve({ u2f: chromeApi });
-                else
-                    notSupported();
-            });
+    if (_backend)
+        return _backend;
+    var supportChecker = new Promise(function (resolve, reject) {
+        function notSupported() {
+            resolve({ u2f: null });
+        }
+        if (!isBrowser)
+            return notSupported();
+        if (isSafari)
+            // Safari doesn't support U2F, and the Safari-FIDO-U2F
+            // extension lacks full support (Multi-facet apps), so we
+            // block it until proper support.
+            return notSupported();
+        var hasNativeSupport = (typeof window.u2f !== 'undefined') &&
+            (typeof window.u2f.sign === 'function');
+        if (hasNativeSupport)
+            return resolve({ u2f: window.u2f });
+        if (isEDGE)
+            // We don't want to check for Google's extension hack on EDGE
+            // as it'll cause trouble (popups, etc)
+            return notSupported();
+        if (location.protocol === 'http:')
+            // U2F isn't supported over http, only https
+            return notSupported();
+        if (typeof MessageChannel === 'undefined')
+            // Unsupported browser, the chrome hack would throw
+            return notSupported();
+        // Test for google extension support
+        chromeApi.isSupported(function (ok) {
+            if (ok)
+                resolve({ u2f: chromeApi });
+            else
+                notSupported();
         });
-    return _backend;
+    })
+        .then(function (response) {
+        _backend = response.u2f ? supportChecker : null;
+        return response;
+    });
+    return supportChecker;
 }
 exports.ErrorCodes = {
     OK: 0,
