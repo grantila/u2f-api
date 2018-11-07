@@ -1,10 +1,21 @@
-export declare type NotYetTyped = {
-    [key: string]: any;
-};
-export declare type RegisterRequest = NotYetTyped;
-export declare type SignRequest = NotYetTyped;
-export declare type RegisterResponse = NotYetTyped;
-export declare type SignResponse = NotYetTyped;
+export interface RegisterRequest {
+    version: string;
+    appId: string;
+    challenge: string;
+}
+export interface SignRequest extends RegisterRequest {
+    keyHandle: string;
+}
+export interface RegisterResponse {
+    clientData: string;
+    registrationData: string;
+    version: string;
+}
+export interface SignResponse {
+    clientData: string;
+    keyHandle: string;
+    signatureData: string;
+}
 export declare const ErrorCodes: {
     OK: number;
     OTHER_ERROR: number;

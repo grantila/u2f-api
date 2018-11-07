@@ -15,11 +15,28 @@ interface API
 	u2f: any;
 }
 
-export declare type NotYetTyped = { [ key: string ]: any; };
-export declare type RegisterRequest = NotYetTyped;
-export declare type SignRequest = NotYetTyped;
-export declare type RegisterResponse = NotYetTyped;
-export declare type SignResponse = NotYetTyped;
+export interface RegisterRequest {
+	version: string;
+	appId: string;
+	challenge: string;
+}
+
+export interface SignRequest
+	extends RegisterRequest {
+	keyHandle: string;
+}
+
+export interface RegisterResponse {
+	clientData: string;
+	registrationData: string;
+	version: string;
+}
+
+export interface SignResponse {
+	clientData: string;
+	keyHandle: string;
+	signatureData: string;
+}
 
 var _backend: Promise< API > = null;
 function getBackend( )
@@ -140,7 +157,7 @@ export function register(
 : Promise< RegisterResponse >
 {
 	if ( !Array.isArray( registerRequests ) )
-		registerRequests = [ registerRequests ];
+		registerRequests = [ registerRequests ] as ReadonlyArray< RegisterRequest >;
 
 	if ( typeof signRequests === 'number' && typeof timeout === 'undefined' )
 	{
@@ -186,7 +203,7 @@ export function sign(
 : Promise< SignResponse >
 {
 	if ( !Array.isArray( signRequests ) )
-		signRequests = [ signRequests ];
+		signRequests = [ signRequests ] as ReadonlyArray< SignRequest >;
 
 	return getBackend( )
 	.then( function( backend )
