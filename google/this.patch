@@ -30,8 +30,8 @@
 +      reply(true);
 +    }
 +  );
-+  // No response from extension within 500ms -> no support
-+  setTimeout(reply.bind(null, false), 500);
++  // No response from extension within 1500ms -> no support
++  setTimeout(reply.bind(null, false), 1500);
 +};
 +
 +/**
