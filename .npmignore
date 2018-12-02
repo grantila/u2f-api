@@ -1,2 +1,4 @@
 node_modules
 scripts
+test
+dist/test

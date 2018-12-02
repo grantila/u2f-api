@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/grantila/u2f-api.git"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "scripts/build.sh",
     "test": "node_modules/.bin/mocha dist/test",
