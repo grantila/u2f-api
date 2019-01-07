@@ -3,6 +3,8 @@
 declare var global: any;
 declare var require: any;
 
+import 'source-map-support/register'
+
 import 'mocha';
 import { expect } from 'chai';
 import { Finally, Try, delay } from 'already';
@@ -161,7 +163,7 @@ function u2fMock( props: MockProps = { } )
 		sign(
 			appId,
 			challenge,
-			signRequests: Array< FakeRequest >,
+			registeredKeys: Array< u2fApi.RegisteredKey >,
 			cbNative,
 			timeout
 		)
@@ -171,10 +173,8 @@ function u2fMock( props: MockProps = { } )
 				if ( props.appId && props.appId !== appId )
 					return { errorCode: ErrorCodesEnum.BAD_REQUEST };
 
-				const found = signRequests.some( req =>
+				const found = registeredKeys.some( req =>
 					store.some( storeReq =>
-						storeReq.request === req.request
-						&&
 						storeReq.appId === req.appId
 					)
 				);

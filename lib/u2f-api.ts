@@ -21,8 +21,7 @@ export interface RegisterRequest {
 	challenge: string;
 }
 
-export interface SignRequest
-	extends RegisterRequest {
+export interface SignRequest extends RegisterRequest {
 	keyHandle: string;
 }
 
@@ -36,6 +35,16 @@ export interface SignResponse {
 	clientData: string;
 	keyHandle: string;
 	signatureData: string;
+}
+
+export type Transport = 'bt' | 'ble' | 'nfc' | 'usb';
+export type Transports = Array< Transport >;
+
+export interface RegisteredKey {
+	version: string;
+	keyHandle: string;
+	transports: Transports;
+	appId: string;
 }
 
 var _backend: Promise< API > = null;
@@ -147,6 +156,22 @@ export function ensureSupport( )
 	.then( _ensureSupport );
 }
 
+function arrayify< T >(
+	value:
+			T | Array< T > | Readonly< T > | ReadonlyArray< T > | undefined | null
+)
+: Array< T >
+{
+	if ( value != null && Array.isArray( value ) )
+		return value;
+
+	return value == null
+		? [ ]
+		: Array.isArray( value )
+		? [ ...value ]
+		: [ < T >value ];
+}
+
 export function register(
 	registerRequests: RegisterRequest | ReadonlyArray< RegisterRequest >,
 	signRequests: SignRequest | ReadonlyArray< SignRequest >,
@@ -163,8 +188,7 @@ export function register(
 )
 : Promise< RegisterResponse >
 {
-	if ( !Array.isArray( registerRequests ) )
-		registerRequests = [ registerRequests ] as ReadonlyArray< RegisterRequest >;
+	const _registerRequests = arrayify( registerRequests );
 
 	if ( typeof signRequests === 'number' && typeof timeout === 'undefined' )
 	{
@@ -172,8 +196,9 @@ export function register(
 		signRequests = null;
 	}
 
-	if ( !signRequests )
-		signRequests = [ ];
+	const _signRequests = arrayify(
+		< SignRequest | ReadonlyArray< SignRequest > >signRequests
+	);
 
 	return getBackend( )
 	.then( function( backend )
@@ -195,10 +220,10 @@ export function register(
 				}
 			}
 
-			const appId = registerRequests[ 0 ].appId;
+			const appId = _registerRequests[ 0 ].appId;
 
 			u2f.register(
-				appId, registerRequests, signRequests, callback, timeout );
+				appId, _registerRequests, _signRequests, callback, timeout );
 		} );
 	} );
 }
@@ -209,8 +234,7 @@ export function sign(
 )
 : Promise< SignResponse >
 {
-	if ( !Array.isArray( signRequests ) )
-		signRequests = [ signRequests ] as ReadonlyArray< SignRequest >;
+	const _signRequests = arrayify( signRequests );
 
 	return getBackend( )
 	.then( function( backend )
@@ -232,10 +256,14 @@ export function sign(
 				}
 			}
 
-			const appId = signRequests[ 0 ].appId;
-			const challenge = signRequests[ 0 ].challenge;
+			const appId = _signRequests[ 0 ].appId;
+			const challenge = _signRequests[ 0 ].challenge;
+			const registeredKeys = _signRequests
+				.map( ( { version, keyHandle, appId } ) =>
+					( { version, keyHandle, appId } as RegisteredKey )
+				);
 
-			u2f.sign( appId, challenge, signRequests, callback, timeout );
+			u2f.sign( appId, challenge, registeredKeys, callback, timeout );
 		} );
 	} );
 }
