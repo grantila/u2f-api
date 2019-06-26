@@ -4,11 +4,14 @@ import * as chromeApi from './generated-google-u2f-api'
 
 
 // Feature detection (yes really)
+// For IE and Edge detection, see https://stackoverflow.com/questions/31757852#31757969
+// and https://stackoverflow.com/questions/56360225#56361977
 const isBrowser =
 	( typeof navigator !== 'undefined' ) && !!navigator.userAgent;
 const isSafari = isBrowser && navigator.userAgent.match( /Safari\// )
 	&& !navigator.userAgent.match( /Chrome\// );
-const isEDGE = isBrowser && navigator.userAgent.match( /Edge\/1[2345]/ );
+const isEDGE = isBrowser && /(Edge\/)|(edg\/)/i.test(navigator.userAgent);
+const isIE = isBrowser && /(MSIE 9|MSIE 10|rv:11.0)/i.test(navigator.userAgent);
 
 interface API
 {
@@ -76,8 +79,8 @@ function getBackend( )
 		if ( hasNativeSupport )
 			return resolve( { u2f: ( < any >window ).u2f } );
 
-		if ( isEDGE )
-			// We don't want to check for Google's extension hack on EDGE
+		if ( isEDGE || isIE )
+			// We don't want to check for Google's extension hack on EDGE & IE
 			// as it'll cause trouble (popups, etc)
 			return notSupported( );
 
