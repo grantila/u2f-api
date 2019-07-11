@@ -268,5 +268,7 @@ export function sign(
 
 			u2f.sign( appId, challenge, registeredKeys, callback, timeout );
 		} );
-	} );
+	} ).catch(function(error){
+		throw error;
+	});
 }
