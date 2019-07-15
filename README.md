@@ -8,6 +8,8 @@ U2F API for browsers
 
 ## History
 
+- 1.1.0
+    - Can be used [without bundler](#using-without-bundler)
 - 1.0.0
 	- Support for custom promise libraries removed
 	- Promises no longer cancellable
@@ -102,6 +104,16 @@ var u2fApi = require( 'u2f-api' ); // CommonJS
 ```js
 import u2fApi from 'u2f-api' // ES modules
 ```
+
+#### Using without bundler
+
+`u2f-api` can be used without a bundler (like Webpack). Just include:
+
+```html
+<head><script src="https://cdn.jsdelivr.net/npm/u2f-api@latest/bundle.js"></script></head>
+```
+
+The functionality will be in the `window.u2fApi` object.
 
 
 ### Registering a passkey

@@ -1,5 +1,3 @@
-'use strict';
-
 declare var global: any;
 declare var require: any;
 
@@ -41,8 +39,8 @@ type KeyValues = Array< KeyValue >;
 class MonkeyPatcher
 {
 	_object: any;
-	_values: Array< string >;
-	_overwrittenValues: KeyValues;
+	_values: Array< string > = [ ];
+	_overwrittenValues: KeyValues = [ ];
 
 	constructor( obj: any )
 	{
@@ -133,7 +131,7 @@ interface MockProps
 
 function handleTimeout(
 	props: MockProps,
-	timeout,
+	timeout: number,
 	fn: ( ) => any
 )
 : Promise< any >
@@ -161,11 +159,11 @@ function u2fMock( props: MockProps = { } )
 
 	return {
 		sign(
-			appId,
-			challenge,
+			appId: string,
+			challenge: any,
 			registeredKeys: Array< u2fApi.RegisteredKey >,
-			cbNative,
-			timeout
+			cbNative: ( ) => void,
+			timeout: number
 		)
 		{
 			return handleTimeout( props, timeout, ( ) =>
@@ -186,11 +184,11 @@ function u2fMock( props: MockProps = { } )
 			.then( cbNative );
 		},
 		register(
-			appId,
+			appId: string,
 			registerRequests: Array< FakeRequest >,
 			signRequests: Array< FakeRequest >,
-			cbNative,
-			timeout
+			cbNative: ( ) => void,
+			timeout: number
 		)
 		{
 			return handleTimeout( props, timeout, ( ) =>
@@ -229,7 +227,7 @@ function wrappedTest(
 		{
 			const mock = ( props || { } ).mock || { };
 
-			dom.window.u2f = u2fMock( );
+			( < any >dom.window ).u2f = u2fMock( );
 		}
 
 		const gmp = new GlobalMonkeyPatcher( );

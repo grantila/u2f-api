@@ -1,6 +1,7 @@
 'use strict';
 
-import * as chromeApi from './generated-google-u2f-api'
+// @ts-ignore
+import { chromeApi } from './generated-google-u2f-api'
 
 
 // Feature detection (yes really)
@@ -40,6 +41,12 @@ export interface SignResponse {
 	signatureData: string;
 }
 
+interface BackendError {
+	errorCode: keyof typeof ErrorCodes;
+}
+
+type OrError< T > = T & BackendError;
+
 export type Transport = 'bt' | 'ble' | 'nfc' | 'usb';
 export type Transports = Array< Transport >;
 
@@ -50,7 +57,7 @@ export interface RegisteredKey {
 	appId: string;
 }
 
-var _backend: Promise< API > = null;
+var _backend: Promise< API > | null = null;
 function getBackend( )
 {
 	if ( _backend )
@@ -93,7 +100,7 @@ function getBackend( )
 			return notSupported( );
 
 		// Test for google extension support
-		chromeApi.isSupported( function( ok )
+		chromeApi.isSupported( function( ok: any )
 		{
 			if ( ok )
 				resolve( { u2f: chromeApi } );
@@ -128,10 +135,10 @@ export const ErrorNames = {
 	"5": "TIMEOUT"
 };
 
-function makeError( msg, err )
+function makeError( msg: string, err: BackendError )
 {
 	const code = err != null ? err.errorCode : 1; // Default to OTHER_ERROR
-	const type = ErrorNames[ '' + code ];
+	const type = ErrorNames[ < keyof typeof ErrorNames >( '' + code ) ];
 	const error = new Error( msg );
 	( < any >error ).metaData = { type, code };
 	return error;
@@ -143,7 +150,7 @@ export function isSupported( )
 	.then( backend => !!backend.u2f );
 }
 
-function _ensureSupport( backend )
+function _ensureSupport( backend: API )
 {
 	if ( !backend.u2f )
 	{
@@ -196,7 +203,7 @@ export function register(
 	if ( typeof signRequests === 'number' && typeof timeout === 'undefined' )
 	{
 		timeout = signRequests;
-		signRequests = null;
+		signRequests = [ ];
 	}
 
 	const _signRequests = arrayify(
@@ -212,7 +219,7 @@ export function register(
 
 		return new Promise< RegisterResponse >( function( resolve, reject )
 		{
-			function callback( response )
+			function callback( response: OrError< RegisterResponse > )
 			{
 				if ( response.errorCode )
 					reject( makeError( "Registration failed", response ) );
@@ -248,7 +255,7 @@ export function sign(
 
 		return new Promise< SignResponse >( function( resolve, reject )
 		{
-			function callback( response )
+			function callback( response: OrError< SignResponse > )
 			{
 				if ( response.errorCode )
 					reject( makeError( "Sign failed", response ) );

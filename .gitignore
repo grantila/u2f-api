@@ -1,3 +1,5 @@
 node_modules
 generated-*
 dist
+dist-bundle
+bundle.js

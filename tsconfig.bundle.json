@@ -1,17 +1,16 @@
 {
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"declaration": true,
 		"lib": [ "es2015", "es2017", "dom" ],
-		"outDir": "dist",
+		"outDir": "dist-bundle",
 		"sourceMap": true,
-		"strict": true,
-		"module": "CommonJS",
+		"module": "es6",
 		"target": "es5"
 	},
 	"include": [
 		"external.d.ts",
-		"index.ts",
-		"src",
-		"test"
+		"index.bundle.ts",
+		"src"
 	]
 }

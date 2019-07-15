@@ -1,10 +1,19 @@
 --- google-u2f-api.js	2018-03-20 12:07:45.000000000 +0100
 +++ generated-google-u2f-api.js	2018-03-20 13:38:17.000000000 +0100
+@@ -7,7 +7,7 @@
+ /**
+  * @fileoverview The U2F api.
+  */
+-'use strict';
++// 'use strict';
+
+
+ /**
 @@ -16,6 +16,8 @@
   */
  var u2f = u2f || {};
  
-+module.exports = u2f; // Adaptation for u2f-api package
++module.exports.chromeApi = u2f; // Adaptation for u2f-api package
 +
  /**
   * FIDO U2F Javascript API Version
