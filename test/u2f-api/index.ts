@@ -271,10 +271,15 @@ describe( 'general', ( ) =>
 	{
 		await api.ensureSupport( );
 
-		const request = "req";
+		const request = {
+			version: 'U2F_V2',
+			appId,
+			challenge: 'Sk1hrSXt_KswFHOhTQ7BED45yQRU2gqY37dfBQ8nNiI',
+			keyHandle: 'foo',
+		};
 
-		await api.register( { appId, request } );
+		await api.register( request );
 
-		await api.sign( { appId, request } );
+		await api.sign( request );
 	} ) );
 } );

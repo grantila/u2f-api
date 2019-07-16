@@ -268,10 +268,15 @@ export function sign(
 
 			const appId = _signRequests[ 0 ].appId;
 			const challenge = _signRequests[ 0 ].challenge;
-			const registeredKeys = _signRequests
+			const registeredKeys = ( [ ] as Array< RegisteredKey > ).concat(
+				..._signRequests
 				.map( ( { version, keyHandle, appId } ) =>
-					( { version, keyHandle, appId } as RegisteredKey )
-				);
+					arrayify( keyHandle )
+					.map( keyHandle =>
+						( { version, keyHandle, appId } as RegisteredKey )
+					)
+				)
+			);
 
 			u2f.sign( appId, challenge, registeredKeys, callback, timeout );
 		} );
