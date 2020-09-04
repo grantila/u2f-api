@@ -36,7 +36,11 @@ export {
 // and https://stackoverflow.com/questions/56360225#56361977
 const isBrowser =
 	( typeof navigator !== 'undefined' ) && !!navigator.userAgent;
-const isSafari = isBrowser && navigator.userAgent.match( /Safari\// )
+const isSafari = isBrowser
+	&& navigator.userAgent.match( /Safari\// )
+	&& !navigator.userAgent.match( /Chrome\// );
+const isSupportedSafari = isBrowser
+	&& navigator.userAgent.match( /Safari\/(1[3456789])/ )
 	&& !navigator.userAgent.match( /Chrome\// );
 const isEDGE = isBrowser && /(Edge\/)|(edg\/)/i.test(navigator.userAgent);
 const isIE = isBrowser && /(MSIE 9|MSIE 10|rv:11.0)/i.test(navigator.userAgent);
@@ -62,7 +66,7 @@ function getBackend( )
 		if ( !isBrowser )
 			return notSupported( );
 
-		if ( isSafari )
+		if ( isSafari && !isSupportedSafari )
 			// Safari doesn't support U2F, and the Safari-FIDO-U2F
 			// extension lacks full support (Multi-facet apps), so we
 			// block it until proper support.

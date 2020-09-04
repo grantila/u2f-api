@@ -259,6 +259,13 @@ describe( 'general', ( ) =>
 		expect( supported ).toBe( false );
 	} ) );
 
+	it( 'isSupported should be true for Safari 13',
+		wrappedTest( { userAgent: "Safari/13" }, async api =>
+	{
+		const supported = await api.isSupported( );
+		expect( supported ).toBe( true );
+	} ) );
+
 	it( 'isSupported should be true with fake window.u2f',
 		wrappedTest( { }, async api =>
 	{
