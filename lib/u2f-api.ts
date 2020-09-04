@@ -3,6 +3,33 @@
 // @ts-ignore
 import { chromeApi } from './generated-google-u2f-api'
 
+import {
+	ErrorCodes,
+	ErrorNames,
+	RegisterRequest,
+	SignRequest,
+	RegisterResponse,
+	SignResponse,
+	Transport,
+	Transports,
+	RegisteredKey,
+
+	makeError,
+	OrError,
+} from './types'
+
+export {
+	ErrorCodes,
+	ErrorNames,
+	RegisterRequest,
+	SignRequest,
+	RegisterResponse,
+	SignResponse,
+	Transport,
+	Transports,
+	RegisteredKey,
+}
+
 
 // Feature detection (yes really)
 // For IE and Edge detection, see https://stackoverflow.com/questions/31757852#31757969
@@ -17,44 +44,6 @@ const isIE = isBrowser && /(MSIE 9|MSIE 10|rv:11.0)/i.test(navigator.userAgent);
 interface API
 {
 	u2f: any;
-}
-
-export interface RegisterRequest {
-	version: string;
-	appId: string;
-	challenge: string;
-}
-
-export interface SignRequest extends RegisterRequest {
-	keyHandle: string;
-}
-
-export interface RegisterResponse {
-	clientData: string;
-	registrationData: string;
-	version: string;
-}
-
-export interface SignResponse {
-	clientData: string;
-	keyHandle: string;
-	signatureData: string;
-}
-
-interface BackendError {
-	errorCode: keyof typeof ErrorCodes;
-}
-
-type OrError< T > = T & BackendError;
-
-export type Transport = 'bt' | 'ble' | 'nfc' | 'usb';
-export type Transports = Array< Transport >;
-
-export interface RegisteredKey {
-	version: string;
-	keyHandle: string;
-	transports: Transports;
-	appId: string;
 }
 
 var _backend: Promise< API > | null = null;
@@ -115,33 +104,6 @@ function getBackend( )
 	} );
 
 	return supportChecker;
-}
-
-export const ErrorCodes = {
-	OK: 0,
-	OTHER_ERROR: 1,
-	BAD_REQUEST: 2,
-	CONFIGURATION_UNSUPPORTED: 3,
-	DEVICE_INELIGIBLE: 4,
-	TIMEOUT: 5
-};
-
-export const ErrorNames = {
-	"0": "OK",
-	"1": "OTHER_ERROR",
-	"2": "BAD_REQUEST",
-	"3": "CONFIGURATION_UNSUPPORTED",
-	"4": "DEVICE_INELIGIBLE",
-	"5": "TIMEOUT"
-};
-
-function makeError( msg: string, err: BackendError )
-{
-	const code = err != null ? err.errorCode : 1; // Default to OTHER_ERROR
-	const type = ErrorNames[ < keyof typeof ErrorNames >( '' + code ) ];
-	const error = new Error( msg );
-	( < any >error ).metaData = { type, code };
-	return error;
 }
 
 export function isSupported( )
