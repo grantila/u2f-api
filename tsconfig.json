@@ -6,7 +6,7 @@
 		"sourceMap": true,
 		"strict": true,
 		"module": "CommonJS",
-		"target": "es5"
+		"target": "es2017"
 	},
 	"include": [
 		"external.d.ts",
