@@ -2,8 +2,10 @@
 	"compilerOptions": {
 		"declaration": true,
 		"lib": [ "es2015", "es2017", "dom" ],
+		"types": [ "node", "jest" ],
+		"moduleResolution": "node",
 		"outDir": "dist",
-		"sourceMap": true,
+		"sourceMap": false,
 		"strict": true,
 		"module": "CommonJS",
 		"target": "es2017"

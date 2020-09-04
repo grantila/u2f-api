@@ -22,7 +22,7 @@ export interface SignResponse {
 }
 
 export interface BackendError {
-	errorCode: keyof typeof ErrorCodes;
+	errorCode?: keyof typeof ErrorCodes;
 }
 
 export type OrError< T > = T & BackendError;

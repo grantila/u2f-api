@@ -1,18 +1,13 @@
 declare var global: any;
 declare var require: any;
 
-import 'source-map-support/register'
-
-import 'mocha';
-import { expect } from 'chai';
-import { Finally, Try, delay } from 'already';
-
+import { Finally, Try, delay } from 'already'
 import * as jsdom from "jsdom";
 
 type API = any;
 
 // Tests the default-import to work
-import u2fApi from '../../';
+import u2fApi from '../dist'
 
 
 const ErrorCodesEnum = {
@@ -119,8 +114,9 @@ function deleteModule( moduleName: string ): void
 
 function getNewU2FApi( ): API
 {
-	deleteModule( '../../' );
-	return require( '../../' );
+	deleteModule( '../' );
+	jest.resetModules( );
+	return require( '../' );
 }
 
 interface MockProps
@@ -249,21 +245,21 @@ describe( 'general', ( ) =>
 		wrappedTest( { mock: { disable: true } }, async api =>
 	{
 		const supported = await api.isSupported( );
-		expect( supported ).to.be.false;
+		expect( supported ).toBe( false );
 	} ) );
 
-	it( 'isSupported should be false for Safari',
+	it( 'isSupported should be false for Safari 10',
 		wrappedTest( { userAgent: "Safari/10" }, async api =>
 	{
 		const supported = await api.isSupported( );
-		expect( supported ).to.be.false;
+		expect( supported ).toBe( false );
 	} ) );
 
 	it( 'isSupported should be true with fake window.u2f',
 		wrappedTest( { }, async api =>
 	{
 		const supported = await api.isSupported( );
-		expect( supported ).to.be.true;
+		expect( supported ).toBe( true );
 	} ) );
 
 	it( 'the flow of register + sign should run through',
