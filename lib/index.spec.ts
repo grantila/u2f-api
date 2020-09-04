@@ -211,12 +211,16 @@ function wrappedTest(
 {
 	return async ( ): Promise< void > =>
 	{
+		const resourceLoader = new jsdom.ResourceLoader( {
+			userAgent: "FakeBrowser/1",
+			...props,
+		} );
 		const dom = new JSDOM(
 			"",
-			Object.assign( {
+			{
 				url: appId,
-				userAgent: "FakeBrowser/1",
-			}, props )
+				resources: resourceLoader,
+			}
 		);
 
 		if ( !props || !props.mock || !props.mock.disable )
