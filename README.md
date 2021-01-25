@@ -1,6 +1,6 @@
 [![npm version][npm-image]][npm-url]
 [![downloads][downloads-image]][npm-url]
-[![build status][travis-image]][travis-url]
+[![build status][build-image]][build-url]
 
 # u2f-api
 
@@ -170,5 +170,5 @@ For more information, please see https://developers.yubico.com/U2F/Libraries/Cli
 [npm-image]: https://img.shields.io/npm/v/u2f-api.svg
 [npm-url]: https://npmjs.org/package/u2f-api
 [downloads-image]: https://img.shields.io/npm/dm/u2f-api.svg
-[travis-image]: https://img.shields.io/travis/grantila/u2f-api.svg
-[travis-url]: https://travis-ci.org/grantila/u2f-api
+[build-image]: https://img.shields.io/github/workflow/status/grantila/u2f-api/Master.svg
+[build-url]: https://github.com/grantila/u2f-api/actions?query=workflow%3AMaster
