@@ -14,9 +14,9 @@
   ],
   "scripts": {
     "build:lib": "scripts/build.sh",
-    "build:rollup": "node_modules/.bin/rimraf bundle.js && node_modules/.bin/rollup dist-bundle/index.bundle.js --file bundle.js --format iife",
+    "build:rollup": "rimraf bundle.js && rollup dist-bundle/index.bundle.js --file bundle.js --format iife",
     "build": "yarn build:lib && yarn build:rollup",
-    "test": "node_modules/.bin/jest --no-cache",
+    "test": "jest --no-cache",
     "buildtest": "npm run build && npm run test",
     "cz": "git-cz"
   },
@@ -47,7 +47,6 @@
     "pre-commit": "1.x",
     "rimraf": "3.0.2",
     "rollup": "^2.26.10",
-    "travis-deploy-once": "5.x",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "typescript": "4.0.2",
