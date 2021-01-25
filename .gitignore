@@ -3,3 +3,4 @@ generated-*
 dist
 dist-bundle
 bundle.js
+example/certs
