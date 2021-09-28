@@ -253,14 +253,14 @@ describe( 'general', ( ) =>
 	} ) );
 
 	it( 'isSupported should be false for Safari 10',
-		wrappedTest( { userAgent: "Safari/10" }, async api =>
+		wrappedTest( { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" }, async api =>
 	{
 		const supported = await api.isSupported( );
 		expect( supported ).toBe( false );
 	} ) );
 
 	it( 'isSupported should be true for Safari 13',
-		wrappedTest( { userAgent: "Safari/13" }, async api =>
+		wrappedTest( { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Safari/605.1.15" }, async api =>
 	{
 		const supported = await api.isSupported( );
 		expect( supported ).toBe( true );

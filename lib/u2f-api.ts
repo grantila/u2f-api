@@ -39,9 +39,9 @@ const isBrowser =
 const isSafari = isBrowser
 	&& navigator.userAgent.match( /Safari\// )
 	&& !navigator.userAgent.match( /Chrome\// );
-const isSupportedSafari = isBrowser
-	&& navigator.userAgent.match( /Safari\/(1[3456789])/ )
-	&& !navigator.userAgent.match( /Chrome\// );
+const isSupportedSafari = isSafari
+	&& navigator.userAgent.match( /Version\/(1[3456789])/ )
+
 const isEDGE = isBrowser && /(Edge\/)|(edg\/)/i.test(navigator.userAgent);
 const isIE = isBrowser && /(MSIE 9|MSIE 10|rv:11.0)/i.test(navigator.userAgent);
 
